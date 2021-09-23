@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+body {
+  background-color: #292929;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+header {
+  grid-column: 1/4;
+  width: 100%;
+  height: 95vh;
+  background: url(billy/billy_cover.jpg) no-repeat 50%;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.container {
+  display: grid;
+}
+
+.header {
+  background-color: #292929;
+  position: fixed;
+  height: 8%;
+  width: 100%;
+}
+
+nav {
+  padding: 0.1% 7%;
+  width: 100%;
+  position: fixed;
+  color: white;
+}
+
+.wrapper {
+  display: grid;
+  grid-row-gap: 1em;
+  grid-template-columns: 1.5fr 5fr 2fr;
+  padding: 5% 0%;
+}
+
+.content, .group, .group2 {
+  grid-column: 2;
+  padding: 2% 5% 3% 5%;
+  background-color: #c5c5c5;
+  color: #575757;
+}
+
+.content, .group {
+  display: grid;
+}
+
+.content {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 0fr 1fr 0fr;
+}
+
+.singleimage {
+  grid-column: 2;
+}
+
+.hidden {
+  display: none;
+}
+
+img {
+  border-radius: 15px;
+  padding: 2% 1%;
+  background-color: #7094b6;
+}
+
+video {
+  margin-top: -600px;
+  height: auto;
+  width: 800px;
+}
+
+.viddiv {
+  overflow: hidden;
+  height: 500px;
+  width: max-content;
+  display: block;
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 5%;
+  margin-bottom: 2%;
+}
+
+.group2 > .imagegroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.group2 > .imagegroup > img:first-child {
+  justify-self: end;
+}
+
+.text {
+  grid-column: 1/4;
+  grid-row: 3;
+  padding-top: 1.5%;
+}
+
+img {
+  height: 400px;
+  width: 300px;
+}
+
+.group {
+  grid-template-rows: 0fr 1fr 0fr;
+}
+
+.imagegroup3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 2%;
+}
+
+.group > div {
+  width: 100%;
+  height: 100%;
+}
+
+.group > .text {
+  grid-column: 1/4;
+  grid-row: 3;
+}
+
+.group > h2 {
+  grid-column: 1/4;
+}
+
+.logo {
+  position: fixed;
+  float: left;
+  margin: 16px 36px;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.title {
+  grid-column: 1/4;
+  grid-row: 1;
+  padding: 1% 0;
+}

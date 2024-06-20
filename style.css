@@ -1,4 +1,535 @@
-body{
-    background-color: #B7B7B7;
+
+
+.kantumruy{
+    font-family: "Kantumruy", sans-serif;
+}
+
+.k2d{
+    font-family: "K2D", sans-serif;
+}
+
+
+:root {
+	--font-family-default:  "Kantumruy", sans-serif;
+	--font-weight-black: 900;
+	--font-weight-extrabold: 800;
+	--font-weight-bold: 700;
+	--font-weight-semibold: 600;
+	--font-weight-medium: 500;
+	--font-weight-regular: 400;
+	--font-weight-light: 300;
+	--font-weight-extralight: 200;
+	--font-weight-thin: 100;
+	--section-width-full: 100%;
+	--section-width-wider: calc(100vw * 1800/1900);
+	--section-width-wide: calc(100vw * 1400/1900);
+	--section-width-boxed: calc(100vw * 1200/1900);
+	--transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    --main-color: #C86EFF;
+    --text-color: #d5d5d5;
+    --bg-color: #282828;
+}
+
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: linear-gradient(180deg, #9B00FF 0%, #d5d5d5 100%);
+}
+
+::-webkit-scrollbar-track {
+	background: var(--bg-color);
+}
+
+*,
+*:before,
+*:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+span,
+button,
+a {
+	-webkit-tap-highlight-color: transparent;
+	/* Removes the highlight on tap */
+}
+
+ul{
+    padding: 0;
+    margin: 0;
+}
+
+h1{
+    font-size: calc(100vw * 128/1900);
+    text-transform: uppercase;
+}
+h2{
+    font-size: calc(100vw * 48/1900);
+}
+
+
+body {
+    background-color: #282828;
+    color: var(--text-color);
+	scroll-behavior: smooth;
+	margin: 0;
+}
+
+a {
+	color: var(--main-color);
+	text-decoration: none;
+}
+
+img {
+	vertical-align: middle;
+	width: 100%;
+}
+
+.d-none {
+	display: none;
+}
+
+.container:before,
+.container:after,
+.container-fluid:before,
+.container-fluid:after,
+.row:before,
+.row:after {
+	display: table;
+	content: "";
+}
+
+.row {
+	display: flex;
+	width: 100%;
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+}
+
+p {
+	font-size: 12px;
+	font-weight: 300;
+	color: var(--text-color);
+	line-height: 24px;
+	letter-spacing: 1px;
+	position: relative;
+}
+
+p {
+	margin: 0 0 1.1em;
+}
+
+.col {
+	width: auto;
+}
+
+.col-10 {
+	width: 10%;
+}
+
+.col-15 {
+	width: 15%;
+}
+
+.col-20 {
+	width: 20%;
+}
+
+.col-25 {
+	width: 25%;
+}
+
+.col-30 {
+	width: 30%;
+}
+
+.col-33 {
+	width: 33.33%;
+}
+
+.col-35 {
+	width: 35%;
+}
+
+.col-40 {
+	width: 40%;
+}
+
+.col-45 {
+	width: 45%;
+}
+
+.col-50 {
+	width: 50%;
+}
+
+.col-60 {
+	width: 60%;
+}
+
+.col-67 {
+	width: 67%;
+}
+
+.col-70 {
+	width: 70%;
+}
+
+.col-75 {
+	width: 75%;
+}
+
+.col-80 {
+	width: 80%;
+}
+
+.col-90 {
+	width: 90%;
+}
+
+.col-100 {
+	width: 100%;
+}
+
+.desktop {
+	display: block;
+}
+
+.container {
+	padding-left: 0;
+	padding-right: 0;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.show {
+	display: block;
+}
+
+.hide,
+.hidden,
+.mobile {
+	display: none !important;
+}
+
+.break {
+	flex-basis: 100%;
+	height: 0;
+}
+
+.anchored {
+	position: relative;
+}
+/* 
+.anchored .anchor {
+	position: absolute;
+	top: calc(-1 * (100vw * 200/1900));
+} */
+
+.anchored .anchor {
+    position: absolute;
+    top: -300px;
+}
+
+.sticky {
+	position: fixed;
+	width: 100%;
+	left: 0;
+	top: 115px;
+	z-index: 100;
+	border-top: 0;
+}
+
+.full {
+	width: var(--section-width-full);
+}
+
+.wider {
+	width: var(--section-width-wider);
+}
+
+.wide {
+	width: var(--section-width-wide) !important;
+}
+
+.boxed {
+	width: var(--section-width-boxed);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="number"],
+input[type="range"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="month"],
+input[type="week"],
+textarea,
+.combobox-wrapper,
+#page .woocommerce .select2-container .select2-selection--single,
+.select2-container .select2-dropdown,
+.chosen-container-single .chosen-single,
+.select2-container .select2-choice,
+select.wpcf7-form-control.wpcf7-select,
+.thegem-combobox-wrap .thegem-combobox__trigger,
+.thegem-combobox-wrap .thegem-combobox__options,
+.product-page__wrapper .product-page__nav .product-page__nav-preview,
+.product-page__wrapper form.cart .quantity,
+.gem-attribute-selector .gem-attribute-options li,
+table.variations .thegem-select {
+	border: 1px solid #dfe5e8;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="number"],
+input[type="range"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="month"],
+input[type="week"],
+textarea,
+select,
+.chosen-container-single .chosen-single,
+.select2-container .select2-choice,
+.widget_product_search form:before {
+	color: #3c3950;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="number"],
+input[type="range"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="month"],
+input[type="week"],
+textarea,
+.chosen-container,
+.select2-container,
+.checkbox-sign,
+.radio-sign {
+	background-color: #f4f6f7;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="number"],
+input[type="range"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="month"],
+input[type="week"] {
+	padding: 0 10px;
+	max-width: 100%;
+	vertical-align: middle;
+}
+
+input,
+button,
+select,
+textarea {
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+input {
+	line-height: normal;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+	color: inherit;
+	font: inherit;
+	margin: 0;
+	outline: 0 none;
+}
+
+button {
+	cursor: pointer;
+}
+.col-xs-1,
+	.col-sm-1,
+	.col-md-1,
+	.col-lg-1,
+	.col-xs-2,
+	.col-sm-2,
+	.col-md-2,
+	.col-lg-2,
+	.col-xs-3,
+	.col-sm-3,
+	.col-md-3,
+	.col-lg-3,
+	.col-xs-4,
+	.col-sm-4,
+	.col-md-4,
+	.col-lg-4,
+	.col-xs-5,
+	.col-sm-5,
+	.col-md-5,
+	.col-lg-5,
+	.col-xs-6,
+	.col-sm-6,
+	.col-md-6,
+	.col-lg-6,
+	.col-xs-7,
+	.col-sm-7,
+	.col-md-7,
+	.col-lg-7,
+	.col-xs-8,
+	.col-sm-8,
+	.col-md-8,
+	.col-lg-8,
+	.col-xs-9,
+	.col-sm-9,
+	.col-md-9,
+	.col-lg-9,
+	.col-xs-10,
+	.col-sm-10,
+	.col-md-10,
+	.col-lg-10,
+	.col-xs-11,
+	.col-sm-11,
+	.col-md-11,
+	.col-lg-11,
+	.col-xs-12,
+	.col-sm-12,
+	.col-md-12,
+	.col-lg-12 {
+		position: relative;
+		min-height: 1px;
+		padding-left: 21px;
+		padding-right: 21px;
+	}
+
+	.col-sm-1,
+	.col-sm-2,
+	.col-sm-3,
+	.col-sm-4,
+	.col-sm-5,
+	.col-sm-6,
+	.col-sm-7,
+	.col-sm-8,
+	.col-sm-9,
+	.col-sm-10,
+	.col-sm-11,
+	.col-sm-12 {
+		float: left;
+	}
+
+
+
+/* Mobile Devices */
+@media only screen and (max-width: 765px) {
+	.margin-top {
+		margin-top: 24px;
+	}
+}
+
+@media (min-width: 768px) {
+	.col-sm-12 {
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width : 599px) {
+	.desktop {
+		display: none;
+	}
+
+	.mobile {
+		display: block !important;
+	}
+
+	.row {
+		flex-direction: column;
+	}
+
+	.col {
+		width: 100% !important;
+	}
+
+	.wider,
+	.wide,
+	.boxed {
+		width: calc(100% - 30px);
+		margin: 0 auto;
+	}
+
+}
+
+
+.text-end{
+    text-align: end;
+}
+.m-0{
+    margin: 0;
+}
+header{
     color: white;
+    padding: calc(100vw * 45/1900) calc(100vw * 105/1900);
+    display: flex;
+    justify-content: space-between;
+}
+
+header .nav-links{
+    list-style-type: none;
+    display: flex;
+}
+
+header .nav-links li{
+    margin-right: calc(100vw * 80/1900);
+}
+header .nav-links li a img{
+    width: calc(100vw * 36/1900);
+}
+
+header .logo{
+    width: calc(100vw * 157/1900);
+}
+
+
+.banner-img {
+    width: calc(100vw * 556/1900);
+    height: calc(100vw * 556/1900);
+    background: #d9d9d9;
+    border-radius: 50%;
 }

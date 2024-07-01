@@ -507,7 +507,10 @@ header{
     color: white;
     padding: calc(100vw * 45/1900) calc(100vw * 105/1900);
     display: flex;
+	width: 100%;
     justify-content: space-between;
+	position: fixed;
+	background: linear-gradient(180deg, #282828 0%, #28282800 100%);
 }
 
 header .nav-links{
@@ -526,6 +529,9 @@ header .logo{
     width: calc(100vw * 157/1900);
 }
 
+.row .col-50{
+	margin-top: calc(100vw * 256/1900);
+}
 
 .banner-img {
     width: calc(100vw * 556/1900);

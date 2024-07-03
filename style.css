@@ -8,7 +8,6 @@
     font-family: "K2D", sans-serif;
 }
 
-
 :root {
 	--font-family-default:  "Kantumruy", sans-serif;
 	--font-weight-black: 900;
@@ -65,19 +64,24 @@ ul{
 }
 
 h1{
-    font-size: calc(100vw * 128/1900);
+    font-size: calc(100vw * 80/1900);
     text-transform: uppercase;
 }
 h2{
     font-size: calc(100vw * 48/1900);
+	text-transform: uppercase;
 }
-
+h3{
+	font-size: calc(100vw * 36/1900);
+	text-transform: uppercase;
+}
 
 body {
     background-color: #282828;
     color: var(--text-color);
 	scroll-behavior: smooth;
 	margin: 0;
+	font-family: var(--font-family-default);
 }
 
 a {
@@ -167,6 +171,10 @@ p {
 
 .col-50 {
 	width: 50%;
+}
+
+.col-55 {
+	width: 55%;
 }
 
 .col-60 {
@@ -510,7 +518,7 @@ header{
 	width: 100%;
     justify-content: space-between;
 	position: fixed;
-	background: linear-gradient(180deg, #282828 0%, #28282800 100%);
+	background: linear-gradient(180deg, #181818 0%, #28282800 100%);
 }
 
 header .nav-links{
@@ -528,14 +536,45 @@ header .nav-links li a img{
 header .logo{
     width: calc(100vw * 157/1900);
 }
-
-.row .col-50{
-	margin-top: calc(100vw * 256/1900);
+.container #main{
+	margin-top: calc(100vw * 200/1900);
+}
+.container #txt-col{
+	padding-right: calc(100vw * 50/1900);
+	padding-top: calc(100vw * 132/1900);
+	text-align: end;
+}
+/* .container #txt-col h1{
+	color: #C86EFF;
+} */
+.container #txt-col .gradient{
+	background-image: linear-gradient(180deg, #9B00FF 0%, #d5d5d5 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
+.container #txt-col #role{
+	letter-spacing: calc(100vw * 4/1900);
+}	
 .banner-img {
     width: calc(100vw * 556/1900);
     height: calc(100vw * 556/1900);
-    background: #d9d9d9;
+    background: #1d1d1d;
     border-radius: 50%;
+}
+
+.banner-img img{
+    clip-path: circle( 50% );
+	opacity: 0.9;
+}
+
+.scroll-down{
+	display: flex;
+	justify-content: center;
+	margin-top: calc(100vw * 50/1900);
+}
+
+.scroll-down img{
+	width: calc(100vw * 135/1900);
+
 }

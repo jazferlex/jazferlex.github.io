@@ -56,6 +56,7 @@ button,
 a {
 	-webkit-tap-highlight-color: transparent;
 	/* Removes the highlight on tap */
+	user-select: none;
 }
 
 ul{
@@ -501,9 +502,22 @@ button {
 		width: calc(100% - 30px);
 		margin: 0 auto;
 	}
-
+}
+.material-symbols-rounded {
+	font-variation-settings:
+	'FILL' 0,
+	'wght' 400,
+	'GRAD' 0,
+	'opsz' 40;
 }
 
+a span.material-symbols-rounded {
+	color: var(--text-color);
+	font-size: calc(100vw * 40/1900);
+}
+a span.material-symbols-rounded:hover{
+	color: var(--main-color);
+}
 
 .text-end{
     text-align: end;

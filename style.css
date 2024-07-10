@@ -1,6 +1,4 @@
-.kantumruy {
-	font-family: "Kantumruy", sans-serif;
-}
+
 
 .k2d {
 	font-family: "K2D", sans-serif;
@@ -38,7 +36,7 @@
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--bg-color);
+	background: linear-gradient(180deg, #181818 0%, #282828 100%);
 }
 
 *,
@@ -118,7 +116,7 @@ img {
 }
 
 p {
-	font-size: 12px;
+	font-size: calc(100vw * 18/1900);
 	font-weight: 300;
 	color: var(--text-color);
 	line-height: 24px;
@@ -213,8 +211,8 @@ p {
 .container {
 	padding-left: 0;
 	padding-right: 0;
-	margin-right: auto;
-	margin-left: auto;
+	margin-right: 5%;
+	margin-left: 5%;
 }
 
 .show {
@@ -499,7 +497,8 @@ header {
 	width: 100%;
 	justify-content: space-between;
 	position: fixed;
-	background: linear-gradient(180deg, #181818 0%, #28282800 100%);
+	z-index: 1000;
+	background: linear-gradient(180deg, #121212 0%,#12121295  50%, #00000000 100%);
 }
 
 header .nav-links {
@@ -542,7 +541,7 @@ header .logo {
 .banner-img {
 	width: calc(100vw * 556/1900);
 	height: calc(100vw * 556/1900);
-	background: #1d1d1d;
+	background: linear-gradient(180deg, #00000000 0%, #191919 100%);
 	border-radius: 50%;
 }
 
@@ -554,11 +553,29 @@ header .logo {
 .scroll-down {
 	display: flex;
 	justify-content: center;
-	margin-top: calc(100vw * 50/1900);
+	margin: calc(100vw * 60/1900) 0;
 }
 
 .scroll-down img {
 	width: calc(100vw * 135/1900);
+
+}
+
+.section {
+	background: linear-gradient(180deg, #181818 0%, #282828 100%);
+}
+
+
+.back-to-top {
+	position: fixed;
+	bottom: calc(100vw * 90/1900);
+	right: calc(100vw * 100/1900);
+	z-index: 1000;
+	display: none;
+}
+.back-to-top a img{
+	width: calc(100vw * 65/1900);
+	rotate: 180deg;
 
 }
 
@@ -597,7 +614,9 @@ header .logo {
 	.mobile {
 		display: block !important;
 	}
-
+	.mobile-reverse{
+		flex-direction: column-reverse!important;
+	}
 	.row {
 		flex-direction: column;
 	}
@@ -614,10 +633,9 @@ header .logo {
 	}
 
 	#txt-col {
-		padding: calc(100vw* 40 / 375) calc(100vw* 32 / 375) 0 calc(100vw* 32 / 375)!important;
-		text-align: start !important;
-	}
-
+        padding: calc(100vw* 40 / 375) calc(100vw* 13 / 375) 0 calc(100vw* 13 / 375) !important;
+        text-align: start !important;
+    }
 	#img-col {
 		display: flex;
 		justify-content: center;

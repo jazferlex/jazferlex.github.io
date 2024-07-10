@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=+Pro:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=+Pro:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -43,7 +47,22 @@
             <img src="images/logo.png" alt="" class="logo">
         </a>
     </header>
-    <div class="section-bannner">
+    <div class="back-to-top">
+        <a href="#banner">
+            <img src="images/arrow.png" alt="">
+        </a>
+    </div>
+    <script>
+        backtotop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 800) {
+                backtotop.style.display = 'block';
+            } else {
+                backtotop.style.display = 'none';
+            }
+        });
+    </script>
+    <div id="banner" class="section section-bannner">
         <div class="container">
             <div id="main" class="row">
                 <div id="txt-col" class="col col-55 text-en">
@@ -55,7 +74,7 @@
                 </div>
                 <div id="img-col" class="col col-45">
                     <div class="banner-img">
-                        <img src="images/CTUARGAO_04.11.24_KING-8280.png" alt="">
+                        <img src="images/profile.png" alt="">
                     </div>
                 </div>
             </div>
@@ -70,6 +89,116 @@
             </div>
         </div>
     </div>
+    <div class="section section-about" id="about">
+        <div class="container">
+            <div class="row mobile-reverse">
+                <div class="col col-50">
+                    <div class="about-img">
+                        <img src="images/coding.png" alt="">
+                    </div>
+                </div>
+                <div class="col col-50">
+                    <div class="about-text">
+                        <h3 class="k2d">About Me</h3>
+                        <p>
+                            I am a dedicated Full Stack Developer with expertise in HTML, CSS, JavaScript, and Python
+                            (Django). I am committed to creating high-quality, user-focused applications.
+                        </p>
+                        <p>
+                            Recently graduated with a degree in Information Technology, I developed custom WordPress
+                            templates and optimized website responsiveness during my internship. One of my notable projects was developing a water billing system where I improved the efficiency of data handling and page loading times.
+                        </p>
+                        <p>
+                            I am an effective communicator and team player who thrives on collaboration and continuous
+                            learning. My goal is to leverage my skills and passion for web development to build
+                            impactful solutions.
+                        </p>
+                        <p>
+                            When I'm not coding, I enjoy making music with my guitar, exploring tech trends, and working
+                            on personal projects.
+                        </p>
+                    </div>
+                    <div class="github">
+                        <a href="https://github.com/jazferlex">github.com/jazferlex</a>
+                    </div>
+                    <div class="my-resume">
+                        <a href="JAZFER LICAROS RESUME.pdf" download>Download Resume</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section section-projects" id="projects">
+        <div class="container">
+            <div class="row">
+                <div class="col col-100">
+                    <h3 class="k2d">Projects</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-50">
+                    <div class="project-card">
+                        <img src="images/CTUARGAO_04.11.24_KING-8280.png" alt="">
+                        <h4 class="">WATER BILLING SYSTEM 2.0</h4>
+                        <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien.
+                        </p>
+                        <div class="technology-used">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JavaScript</span>
+                            <span>Python</span>
+                            <span>Django</span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-50">
+                    <div class="project-card">
+                        <img src="images/CTUARGAO_04.11.24_KING-8280.png" alt="">
+                        <h4 class="">FLOOD MONITORING AI WITH MOBILE APP</h4>
+                        <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section section-contact" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col col-100">
+                    <h3 class="k2d">Contact Me</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-100">
+                    <div class="contact-info">
+                        <h4>LinkedIn</h4>
+                        <p>
+                            <a href="https://www.linkedin.com/in/jazfer-licaros-0b1b3b1b4/">linkedin.com/in/jazfer-licaros-0b1b3b1b4</a>
+                        </p>
+                        <h4 class="">Email</h4>
+                        <p class="">
+                            <a href="mailto: jazferlicaros@gmail.com">jazferlicaros@gmail.com</a>
+                        </p>
+                        <h4 class="">Phone</h4>
+                        <p class="">
+                            <a href="tel: +639306995489">+639306995489</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col col-100">
+                    <p class="">Designed and Developed by Jazfer Licaros</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

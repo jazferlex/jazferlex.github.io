@@ -481,7 +481,12 @@ a span.material-symbols-rounded {
 a span.material-symbols-rounded:hover {
 	color: var(--main-color);
 }
-
+.align-right{
+	text-align: right;
+}
+.bold{
+	font-weight: bold;
+}
 .text-end {
 	text-align: end;
 }
@@ -518,8 +523,12 @@ header .logo {
 	width: calc(100vw * 157/1900);
 }
 
+.container{
+	padding-top: calc(100vw * 80/1900);
+	padding-bottom: calc(100vw * 60/1900);
+}
 .container #main {
-	margin-top: calc(100vw * 200/1900);
+	margin-top: calc(100vw * 120/1900);
 }
 
 .container #txt-col {
@@ -553,7 +562,7 @@ header .logo {
 .scroll-down {
 	display: flex;
 	justify-content: center;
-	margin: calc(100vw * 60/1900) 0;
+	margin-top: calc(100vw * 60/1900);
 }
 
 .scroll-down img {
@@ -576,9 +585,11 @@ header .logo {
 .back-to-top a img{
 	width: calc(100vw * 65/1900);
 	rotate: 180deg;
-
 }
 
+.about-text{
+	padding-left: calc(100vw * 60/1900);
+}
 
 /* Mobile Devices */
 @media only screen and (max-width: 765px) {
@@ -605,6 +616,11 @@ header .logo {
 
 	h3 {
 		font-size: calc(100vw * 16/375) !important;
+	}
+
+	p{
+		font-size: calc(100vw * 16/375);
+		letter-spacing: 0;
 	}
 
 	.desktop {

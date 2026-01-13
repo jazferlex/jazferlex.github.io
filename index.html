@@ -36,6 +36,13 @@
                 </a>
             </li>
             <li>
+                <a href="#skills">
+                    <span class="material-symbols-rounded">
+                        auto_graph
+                    </span>
+                </a>
+            </li>
+            <li>
                 <a href="#contact">
                     <span class="material-symbols-rounded">
                         call
@@ -60,6 +67,20 @@
             } else {
                 backtotop.style.display = 'none';
             }
+        });
+        // Smooth anchor scrolling using header height as offset
+        document.addEventListener('click', function (e) {
+            var a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            var href = a.getAttribute('href');
+            if (!href || href === '#') return;
+            var target = document.querySelector(href);
+            if (!target) return;
+            e.preventDefault();
+            var header = document.querySelector('header');
+            var offset = header ? header.offsetHeight : 20;
+            var top = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
         });
     </script>
     <div id="banner" class="section section-bannner">
@@ -155,9 +176,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col col-50">
+                <div class="col col-33">
                     <div class="project-card">
-                        <iframe width="400" height="250" src="https://www.youtube.com/embed/0NPfucTJ5og" title="Water Billing System 2.0 Demo Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <div class="video-thumb" data-video-id="0NPfucTJ5og" aria-label="Play Water Billing demo">
+                            <img src="https://img.youtube.com/vi/0NPfucTJ5og/hqdefault.jpg" alt="Water Billing System demo thumbnail">
+                            <button class="play-button" aria-hidden="true"><span class="material-symbols-rounded">play_arrow</span></button>
+                        </div>
                         <h4 class="">WATER BILLING SYSTEM 2.0</h4>
                         <p class="project-meta">Sep 2022 - Feb 2023 | Associated with Cebu Technological University</p>
                         <p class="">Water Billing System 2.0 is an advanced billing solution developed using Python (Django). It features a robust backend for managing water consumption data and an intuitive user interface for efficient billing processes. This system supports real-time data updates, detailed reporting, and seamless user interaction, ensuring accurate and efficient water billing management.</p>
@@ -175,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-50">
+                <div class="col col-33">
                     <div class="project-card">
                         <img src="https://via.placeholder.com/400x250/28a745/ffffff?text=Flood+Monitoring+AI" alt="Flood Monitoring AI Screenshot">
                         <h4 class="">FLOOD MONITORING AI WITH MOBILE APP</h4>
@@ -188,6 +212,48 @@
                             <span>Raspberry Pi</span>
 
                         </div>
+                    </div>
+                </div>
+                <div class="col col-33">
+                    <div class="project-card">
+                        <img src="https://via.placeholder.com/400x250/6f42c1/ffffff?text=SAM+(.NET+%26+Angular)" alt="SAM Project Screenshot">
+                        <h4 class="">SAM — Self Account Management</h4>
+                        <p class="project-meta">Aug 2024 - Present | Accenture (Internal)</p>
+                        <p class="">Built a secure self-service portal for password resets and account unlocks using a .NET API backend and an Angular frontend. Integrated with Azure AD SSO, improved support efficiency by enabling users to complete routine account tasks without tickets.</p>
+                        <div class="technology-used">
+                            <span>.NET API</span>
+                            <span>Angular</span>
+                            <span>Azure AD</span>
+                            <span>SSO</span>
+                            <span>Azure</span>
+                            <span>Git</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section section-skills" id="skills">
+        <div class="container">
+            <div class="row">
+                <div class="col col-100">
+                    <h3 class="k2d">Skills</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-100">
+                    <div class="skills-list">
+                        <span class="skill-chip">ReactJS</span>
+                        <span class="skill-chip">Angular</span>
+                        <span class="skill-chip">HTML5</span>
+                        <span class="skill-chip">CSS3</span>
+                        <span class="skill-chip">Python / Django</span>
+                        <span class="skill-chip">ASP.NET</span>
+                        <span class="skill-chip">Flutter</span>
+                        <span class="skill-chip">MySQL / Oracle</span>
+                        <span class="skill-chip">Keras</span>
+                        <span class="skill-chip">Azure</span>
+                        <span class="skill-chip">Git</span>
                     </div>
                 </div>
             </div>
@@ -225,6 +291,23 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('click', function (e) {
+            var thumb = e.target.closest('.video-thumb');
+            if (!thumb) return;
+            var id = thumb.dataset.videoId;
+            if (!id) return;
+            var iframe = document.createElement('iframe');
+            iframe.width = thumb.clientWidth || 400;
+            iframe.height = thumb.clientHeight || 250;
+            iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+            iframe.title = 'Water Billing System 2.0 Demo Video';
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+            iframe.setAttribute('allowfullscreen', '');
+            thumb.replaceWith(iframe);
+        });
+    </script>
 </body>
 
 </html>

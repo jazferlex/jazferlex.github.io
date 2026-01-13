@@ -591,6 +591,84 @@ header .logo {
 	padding-left: calc(100vw * 60/1900);
 }
 
+/* Project meta and technologies */
+.project-meta {
+	font-size: calc(100vw * 14/1900);
+	color: #bfbfbf;
+	margin-bottom: calc(100vw * 10/1900);
+}
+.technology-used {
+	margin-top: calc(100vw * 12/1900);
+	display: flex;
+	flex-wrap: wrap;
+	gap: calc(100vw * 10/1900);
+}
+.technology-used span {
+	background: rgba(255,255,255,0.03);
+	padding: 6px 10px;
+	border-radius: 6px;
+	font-size: calc(100vw * 14/1900);
+}
+
+/* Video thumbnail */
+.video-thumb{
+	position: relative;
+	width: 100%;
+	max-width: 400px;
+	cursor: pointer;
+}
+.video-thumb img{
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+.play-button{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(0,0,0,0.6);
+	color: white;
+	border: none;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	font-size: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Skills section */
+.skills-list{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 12px;
+}
+.skill-chip{
+	background: linear-gradient(90deg,#3a3a3a, #2a2a2a);
+	color: var(--text-color);
+	padding: 10px 14px;
+	border-radius: 20px;
+	font-weight: 500;
+    transition: transform 180ms var(--transition), box-shadow 180ms var(--transition), background 180ms linear;
+}
+
+.skill-chip:hover,
+.skill-chip:focus {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.45);
+    background: linear-gradient(90deg,#9B00FF,#3a3a3a);
+    color: #ffffff;
+}
+
+/* Project card tweaks */
+.project-card{
+	padding: calc(100vw * 24/1900);
+}
+
 /* Mobile Devices */
 @media only screen and (max-width: 765px) {
 	.margin-top {
@@ -672,6 +750,36 @@ header .logo {
 	a span.material-symbols-rounded {
 		font-size: calc(100vw * 20/375);
 	}
+		/* Responsive tweaks for added components */
+		.video-thumb {
+			max-width: 100% !important;
+			margin: 0 auto;
+		}
+		.video-thumb img {
+			border-radius: 8px;
+		}
+		.play-button {
+			width: 44px;
+			height: 44px;
+			font-size: 18px;
+		}
+		.project-card {
+			padding: calc(100vw * 14/375) !important;
+		}
+		.technology-used {
+			gap: 8px;
+		}
+		.technology-used span {
+			padding: 6px 8px;
+			font-size: calc(100vw * 12/375);
+		}
+		.skill-chip {
+			padding: 8px 10px;
+			font-size: calc(100vw * 12/375);
+		}
+		.project-meta {
+			font-size: calc(100vw * 12/375);
+		}
 	.container #txt-col .gradient {
         text-align: center;
 	}

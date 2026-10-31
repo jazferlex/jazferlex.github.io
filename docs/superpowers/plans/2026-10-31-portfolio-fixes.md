@@ -14,7 +14,7 @@
 
 - Preserve the existing visual design, facts, contact details, resume, advertising configuration, and motion.
 - Do not invent official project names, dates, achievements, or metrics.
-- Use the descriptive hackathon heading `Company Policy Q&A`; omit the unknown date.
+- Use the descriptive hackathon heading `Company Policy Q&A`; show the user-confirmed date range `Oct 2025 – Dec 2025`.
 - Keep the original photograph; add WebP variants at widths 800 and 1600, quality 80, without metadata.
 - Use absolute `https://jazferlex.github.io/` URLs for canonical and social metadata; use the existing 600 × 600 `images/profile.png` for previews.
 - No new dependencies, build framework, hosting service, account changes, or paid services.
@@ -22,7 +22,7 @@
 
 ## Review Focus
 
-Check unknown-date copy, image aspect ratio and crop, narrow-screen overflow, direct fragment links with animated content, and all local asset/resume paths.
+Check confirmed project dates, image aspect ratio and crop, narrow-screen overflow, direct fragment links with animated content, and all local asset/resume paths.
 
 ### Task 1: Complete public copy, image delivery, and link previews
 
@@ -31,7 +31,7 @@ Check unknown-date copy, image aspect ratio and crop, narrow-screen overflow, di
 **Interfaces:** Existing `.about-photo img` styling and `[data-reveal]` attributes remain unchanged. The browser uses `srcset` and `sizes` to choose the image. Public sharing clients read metadata from the document head.
 
 - [ ] Verify the reported placeholder copy, missing metadata, and original image size before editing.
-- [ ] Update the hackathon heading and remove the unknown date. Retain project facts and technologies.
+- [ ] Update the hackathon heading and show `Oct 2025 – Dec 2025`. Retain project facts and technologies.
 - [ ] Compress the existing photograph into the two specified WebP variants with cwebp. Point the existing About image to them using appropriate responsive sizes, dimensions, lazy loading, and asynchronous decoding.
 - [ ] Add canonical, Open Graph, and Twitter summary metadata using the existing title, description, URL, and profile image. Include image dimensions and descriptive image alt text.
 - [ ] Validate HTML parsing, local links/assets, unique IDs, no placeholder copy, image dimensions and savings, and `git diff --check`. There is no existing test suite or build command; do not introduce one for these reversible content and asset changes.

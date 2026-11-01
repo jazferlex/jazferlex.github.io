@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "title": "Jazfer Licaros | Software Engineer",
+    "description": "Jazfer Licaros is a software engineer building web applications, platform integrations, AI-enabled tools, and secure enterprise systems.",
+    "canonicalUrl": "https://jazferlex.github.io/",
+    "themeColor": "#141316",
+    "faviconUrl": "images/logo-removebg-preview.png",
+    "socialImage": {
+      "url": "https://jazferlex.github.io/images/profile.png",
+      "alt": "Portrait of Jazfer Licaros",
+      "width": 600,
+      "height": 600
+    }
+  },
+  "header": {
+    "logo": {
+      "url": "images/logo.png",
+      "alt": "Jazfer"
+    },
+    "brandAriaLabel": "Jazfer Licaros, back to top",
+    "navigationAriaLabel": "Main navigation",
+    "skipLinkLabel": "Skip to content",
+    "navigation": {
+      "projects": "Work",
+      "about": "About",
+      "skills": "Skills",
+      "contact": "Contact"
+    },
+    "resumeLabel": "Resume"
+  },
+  "resume": {
+    "url": "Jazfer_Licaros.pdf",
+    "downloadFilename": "Jazfer_Licaros.pdf"
+  },
+  "hero": {
+    "eyebrow": "Jazfer Licaros · Software Engineer · Cebu, Philippines",
+    "heading": {
+      "lineOne": "Making systems",
+      "lineTwo": "work together."
+    },
+    "description": "I build web applications, connect platforms, and turn manual work into reliable software workflows.",
+    "primaryActionLabel": "Explore my work",
+    "secondaryActionLabel": "Let's connect",
+    "notes": [
+      "Full-stack development",
+      "AI & automation",
+      "Platform integrations"
+    ],
+    "portrait": {
+      "url": "images/profile.png",
+      "alt": "Jazfer Licaros"
+    },
+    "footerText": "Thoughtful code. Practical solutions.",
+    "footerLinkLabel": "Selected work"
+  },
+  "work": {
+    "eyebrow": "01 / Selected work",
+    "heading": {
+      "lineOne": "From ideas to",
+      "lineTwo": "working systems."
+    },
+    "description": "Projects across AI-enabled applications, connected business tools, and enterprise self-service.",
+    "academicEyebrow": "Academic Capstone",
+    "academicHeading": "Where it started."
+  },
+  "projects": [
+    {
+      "id": "estimate-pro",
+      "category": "selected",
+      "status": "published",
+      "layout": "standard",
+      "organization": "ProCalcs",
+      "period": "2026",
+      "title": "Estimate Pro",
+      "description": "Contributed to an AI-assisted HVAC estimating platform that turns plans and email inputs into reviewable estimates.",
+      "contribution": "Developed pricing, approval, and email-delivery features for PDF estimates and Outlook draft replies.",
+      "note": "",
+      "tags": [
+        "AI-assisted estimating",
+        "PDF workflows",
+        "Outlook"
+      ],
+      "tagsAriaLabel": "Estimate Pro focus areas",
+      "link": {
+        "label": "",
+        "url": ""
+      }
+    },
+    {
+      "id": "zoho-sheet-sync",
+      "category": "selected",
+      "status": "published",
+      "layout": "standard",
+      "organization": "ProCalcs",
+      "period": "2026",
+      "title": "Zoho Sheet Sync",
+      "description": "Developed an integration between Zoho and Google Sheets to synchronize project data across connected systems.",
+      "contribution": "Implemented incremental updates and data reconciliation to keep information aligned between platforms.",
+      "note": "",
+      "tags": [
+        "Zoho",
+        "Google Sheets",
+        "Data synchronization"
+      ],
+      "tagsAriaLabel": "Zoho Sheet Sync focus areas",
+      "link": {
+        "label": "",
+        "url": ""
+      }
+    },
+    {
+      "id": "songproiq",
+      "category": "selected",
+      "status": "published",
+      "layout": "standard",
+      "organization": "ProCalcs",
+      "period": "2026",
+      "title": "SongProIQ",
+      "description": "Contributed to an AI-powered songwriting coaching application built with Next.js.",
+      "contribution": "Enhanced conversational AI mentoring and audio analysis to support useful songwriting feedback.",
+      "note": "",
+      "tags": [
+        "Next.js",
+        "Conversational AI",
+        "Audio analysis"
+      ],
+      "tagsAriaLabel": "SongProIQ technologies",
+      "link": {
+        "label": "Visit SongProIQ ↗",
+        "url": "https://songproiq.com"
+      }
+    },
+    {
+      "id": "sam",
+      "category": "selected",
+      "status": "published",
+      "layout": "standard",
+      "organization": "Accenture · Internal",
+      "period": "Apr 2025 – Feb 2026",
+      "title": "Self Account Management",
+      "description": "Built an enterprise self-service portal for password resets and account recovery, reducing reliance on manual support workflows.",
+      "contribution": "Developed secure .NET APIs and an Angular frontend with Azure AD SSO and role-based access control.",
+      "note": "",
+      "tags": [
+        ".NET",
+        "Angular",
+        "Azure AD",
+        "SSO / RBAC"
+      ],
+      "tagsAriaLabel": "SAM technologies",
+      "link": {
+        "label": "",
+        "url": ""
+      }
+    },
+    {
+      "id": "hackathon-rag",
+      "category": "selected",
+      "status": "published",
+      "layout": "standard",
+      "organization": "Accenture · Hackathon",
+      "period": "Oct 2025 – Dec 2025",
+      "title": "Company Policy Q&A",
+      "description": "A customer-facing RAG project using company-policy PDFs as the knowledge source.",
+      "contribution": "Built the APIs, frontend, and backend; used Azure AI Studio and an OpenAI mini model. Checked answers manually against the relevant document topics.",
+      "note": "",
+      "tags": [
+        "RAG",
+        "Azure AI Studio",
+        "OpenAI"
+      ],
+      "tagsAriaLabel": "Hackathon RAG project technologies",
+      "link": {
+        "label": "",
+        "url": ""
+      }
+    },
+    {
+      "id": "water-billing",
+      "category": "selected",
+      "status": "published",
+      "layout": "wide",
+      "organization": "LGU system · Currently in use",
+      "period": "Sep 2022 – Jul 2024",
+      "title": "Water Billing System 2.0",
+      "description": "Reengineered a water billing system with a Django backend, improved database design, secure administration, and a responsive Bootstrap interface.",
+      "contribution": "",
+      "note": "",
+      "tags": [
+        "Python / Django",
+        "MySQL",
+        "Bootstrap"
+      ],
+      "tagsAriaLabel": "Water Billing technologies",
+      "link": {
+        "label": "Watch the project demo",
+        "url": "https://www.youtube.com/watch?v=0NPfucTJ5og"
+      }
+    },
+    {
+      "id": "flood-monitoring-ai",
+      "category": "academic",
+      "status": "published",
+      "layout": "standard",
+      "organization": "Capstone",
+      "period": "Sep 2023 – Jan 2024",
+      "title": "Flood Monitoring AI",
+      "description": "Captured and labeled 1,300+ flood images, trained a segmentation model, and connected water-level data to a Flutter monitoring app through Firebase.",
+      "contribution": "",
+      "note": "Computer vision meets real-world monitoring.",
+      "tags": [
+        "Python / Keras",
+        "Raspberry Pi",
+        "Flutter",
+        "Firebase"
+      ],
+      "tagsAriaLabel": "Flood Monitoring technologies",
+      "link": {
+        "label": "",
+        "url": ""
+      }
+    }
+  ],
+  "about": {
+    "eyebrow": "02 / About me",
+    "heading": {
+      "lineOne": "Curious by nature.",
+      "lineTwo": "Practical by design."
+    },
+    "paragraphs": [
+      "I'm Jazfer, a software engineer with experience in enterprise systems, full-stack development, and AI-enabled applications. I enjoy connecting the pieces: the application, the data, and the tools people use every day.",
+      "My work spans building secure self-service tools, supporting 15+ enterprise applications, and developing integrations that reduce manual work. I graduated with a BS in Information Technology from Cebu Technological University in 2024.",
+      "Outside of coding, you'll often find me playing guitar, exploring tech, or working on a personal project."
+    ],
+    "photo": {
+      "url": "images/about-800.webp",
+      "alt": "Jazfer outdoors"
+    },
+    "photoCaption": "A little beyond the code.",
+    "link": {
+      "label": "More on GitHub",
+      "url": "https://github.com/jazferlex"
+    },
+    "experienceLabel": "Experience"
+  },
+  "experience": [
+    {
+      "id": "procalcs-experience",
+      "status": "published",
+      "organization": "ProCalcs",
+      "role": "AI Integration & Automation Specialist",
+      "period": "Mar 2026 – Oct 2026"
+    },
+    {
+      "id": "accenture-experience",
+      "status": "published",
+      "organization": "Accenture",
+      "role": "Associate Software Engineer",
+      "period": "Aug 2024 – Feb 2026"
+    },
+    {
+      "id": "above-digital-experience",
+      "status": "published",
+      "organization": "Above Digital",
+      "role": "Web Developer Intern",
+      "period": "Jan 2024 – Jun 2024"
+    }
+  ],
+  "skills": {
+    "eyebrow": "03 / Toolkit",
+    "heading": {
+      "lineOne": "The tools behind",
+      "lineTwo": "the work."
+    },
+    "description": "A full-stack foundation, with a focus on connecting applications and making everyday workflows better."
+  },
+  "skillGroups": [
+    {
+      "id": "applications-toolkit",
+      "status": "published",
+      "title": "Applications",
+      "rows": [
+        "React · Angular · Next.js",
+        "HTML · CSS · Bootstrap",
+        "ASP.NET · Python · Django"
+      ]
+    },
+    {
+      "id": "integrations-toolkit",
+      "status": "published",
+      "title": "Integrations & AI",
+      "rows": [
+        "REST APIs · Authentication · SSO",
+        "Zoho · Google Sheets · Microsoft 365",
+        "Keras · Google Colab · AI-assisted development"
+      ]
+    },
+    {
+      "id": "infrastructure-toolkit",
+      "status": "published",
+      "title": "Data & infrastructure",
+      "rows": [
+        "SQL Server · Oracle · MySQL · Firebase",
+        "Azure · IIS · Windows Server",
+        "Git · Azure DevOps · CI/CD · ServiceNow"
+      ]
+    }
+  ],
+  "contact": {
+    "eyebrow": "04 / Get in touch",
+    "heading": {
+      "lineOne": "Have something",
+      "lineTwo": "in mind?"
+    },
+    "description": "Let's talk about software, integrations, or an idea worth building.",
+    "email": "jazferlex@gmail.com",
+    "phoneDisplay": "+63 993 164 5510",
+    "phoneDial": "+639931645510",
+    "resumeLabel": "Download my resume"
+  },
+  "footer": {
+    "attribution": "Designed & developed by Jazfer Licaros",
+    "backToTopLabel": "Back to top"
+  }
+}

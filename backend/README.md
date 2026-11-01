@@ -23,7 +23,7 @@ Register Google OAuth redirect URIs `http://localhost:3000/api/auth/callback/goo
 
 Run `npm run db:migrate`, then `npm run db:seed` against the intended database explicitly. Migrations use Better Auth 1.7.14's exported `getMigrations` with the same options as runtime and create `portfolio_content`. Google configuration is not required for migrations. Seeding is idempotent and never overwrites an existing document. Neither deployment builds nor server requests automatically migrate or seed a database.
 
-`npm run dev` starts on `127.0.0.1:3000` (`PORT` may override). It serves the admin plus an explicit allowlist of public root assets for local QA. Private repository, environment, database and Git files cannot be served. The Vercel build publishes only `backend/public`, with API code bundled separately.
+`npm run dev` starts on `127.0.0.1:3000` (`PORT` may override). It serves the admin plus an explicit allowlist of public root assets for local QA. Private repository, environment, database and Git files cannot be served. The Vercel build publishes only `backend/public`, with API code bundled separately. All API paths explicitly rewrite to the concrete `api/index.js` function; a validated captured path restores the request route and preserves Google callback state/code query values.
 
 ## API and authorization
 

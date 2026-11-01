@@ -86,6 +86,23 @@
     if (saveState) { saveState.textContent = 'Unsaved changes'; saveState.dataset.dirty = 'true'; }
     if (saveButton) saveButton.disabled = state.saving;
   };
+  const setEditorBusy = busy => {
+    state.saving = busy;
+    app.setAttribute('aria-busy', String(busy));
+    if (busy) {
+      app.querySelectorAll('input,textarea,select,button').forEach(input => {
+        if (input === saveButton) return;
+        input.dataset.wasDisabled = String(input.disabled);
+        input.disabled = true;
+      });
+    } else {
+      app.querySelectorAll('[data-was-disabled]').forEach(input => {
+        input.disabled = input.dataset.wasDisabled === 'true';
+        delete input.dataset.wasDisabled;
+      });
+    }
+    if (saveButton) saveButton.disabled = busy || !state.dirty;
+  };
   const safeUrl = (value, canonical = false) => {
     if (typeof value !== 'string' || !value || value !== value.trim() || /[\\\u0000-\u0020\u007f]/.test(value) || value.startsWith('//') || /%(?:0[0-9a-f]|1[0-9a-f]|7f|5c)/i.test(value)) throw new Error('Use an HTTPS URL or a safe relative path.');
     const parsed = new URL(value, PUBLIC_SITE);
@@ -239,9 +256,7 @@
     try { validateDocument(); } catch (error) { message(error.message, 'error'); return; }
     const invalid = [...workspace.querySelectorAll('input,textarea,select')].find(input => !input.checkValidity());
     if (invalid) { invalid.reportValidity(); return; }
-    state.saving = true; saveButton.disabled = true; saveButton.textContent = 'Saving…'; saveButton.setAttribute('aria-busy', 'true');
-    // Keep inputs disabled while the snapshot is saving so successful saves never discard newer local edits.
-    app.querySelectorAll('input,textarea,select,button').forEach(input => { if (input === saveButton) return; input.dataset.wasDisabled = String(input.disabled); input.disabled = true; });
+    setEditorBusy(true); saveButton.textContent = 'Saving…'; saveButton.setAttribute('aria-busy', 'true');
     try {
       const result = await request('/api/admin/content', { method: 'PUT', body: JSON.stringify({ content: state.content, revision: state.revision }) });
       state.content = result.content; state.revision = result.revision; state.updatedAt = result.updatedAt; state.dirty = false;
@@ -257,14 +272,15 @@
       }
       if (error.status === 401) notice.append(button('Download my draft', downloadDraft), button('Sign in again', () => signIn()));
     } finally {
-      state.saving = false; saveButton.disabled = !state.dirty; saveButton.textContent = 'Save changes'; saveButton.removeAttribute('aria-busy');
-      app.querySelectorAll('[data-was-disabled]').forEach(input => { input.disabled = input.dataset.wasDisabled === 'true'; delete input.dataset.wasDisabled; });
+      setEditorBusy(false); saveButton.textContent = 'Save changes'; saveButton.removeAttribute('aria-busy');
     }
   };
   const signOut = async () => {
     if (state.saving || (state.dirty && !confirm('Sign out and discard unsaved changes?'))) return;
+    setEditorBusy(true);
     try { await request('/api/auth/sign-out', { method: 'POST', body: '{}' }); state.dirty = false; state.content = null; showLogin(); }
-    catch (error) { message(`Could not sign out. ${error.message}`, 'error'); }
+    catch (error) { message(`Could not sign out. ${error.message} Your draft is preserved.`, 'error'); }
+    finally { setEditorBusy(false); }
   };
   const shell = () => {
     app.replaceChildren(); app.setAttribute('aria-busy', 'false'); const layout = element('div', undefined, 'shell');
@@ -283,15 +299,19 @@
     main.append(toolbar, notice, workspace); layout.append(sidebar, main); app.append(layout); renderContent();
   };
   const loadContent = async () => {
+    if (state.saving) return;
+    setEditorBusy(true);
     try {
       const result = await request('/api/admin/content');
       if (!result?.content || result.content.schemaVersion !== 1) throw new Error('The server returned an unsupported content document.');
       state.content = result.content; state.revision = result.revision; state.updatedAt = result.updatedAt; state.conflict = null; state.dirty = false; shell();
     } catch (error) {
-      if (error.status === 401) showLogin();
-      else if (state.content) message(`Could not reload. ${error.message} Your draft is preserved.`, 'error');
+      if (state.content) {
+        message(`Could not reload. ${error.message} Your draft is preserved.`, 'error');
+        if (error.status === 401) notice.append(button('Download my draft', downloadDraft), button('Sign in again', () => signIn()));
+      } else if (error.status === 401) showLogin();
       else showLogin(error.status === 403 ? 'This Google account is not authorized to edit this portfolio.' : `The editor could not load content. ${error.message}`);
-    }
+    } finally { setEditorBusy(false); }
   };
   const signIn = async () => {
     const signInButton = document.getElementById('google-sign-in');

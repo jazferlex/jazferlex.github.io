@@ -3,7 +3,7 @@
   const app = document.getElementById('app');
   const PUBLIC_SITE = 'https://jazferlex.github.io/';
   const tabs = ['Overview', 'Site & SEO', 'Hero', 'Projects', 'About', 'Experience', 'Toolkit', 'Contact & Footer'];
-  const state = { content: null, revision: null, updatedAt: null, user: null, tab: 'Overview', dirty: false, saving: false, conflict: null };
+  const state = { content: null, revision: null, updatedAt: null, user: null, tab: 'Overview', dirty: false, saving: false, confirming: false, conflict: null };
   let fieldSequence = 0;
   let notice;
   let workspace;
@@ -17,8 +17,40 @@
   };
   const button = (label, action, className = '') => {
     const item = element('button', label, className);
-    item.type = 'button'; item.addEventListener('click', action); return item;
+    item.type = 'button';
+    item.addEventListener('click', event => {
+      if (state.confirming && !item.closest('dialog')) return;
+      action(event);
+    });
+    return item;
   };
+  const confirmAction = (title, description, confirmLabel) => new Promise(resolve => {
+    if (state.confirming || state.saving) { resolve(false); return; }
+    state.confirming = true;
+    const previousFocus = document.activeElement;
+    const previousInert = app.inert;
+    app.inert = true;
+    const dialog = element('dialog', undefined, 'confirmation');
+    dialog.setAttribute('aria-labelledby', 'confirmation-title');
+    dialog.setAttribute('aria-describedby', 'confirmation-description');
+    const heading = element('h2', title); heading.id = 'confirmation-title';
+    const detail = element('p', description); detail.id = 'confirmation-description';
+    let accepted = false;
+    const cancel = button('Cancel', () => dialog.close());
+    const accept = button(confirmLabel, () => { accepted = true; dialog.close(); }, 'primary');
+    const actions = element('div', undefined, 'confirmation-actions'); actions.append(cancel, accept);
+    dialog.append(heading, detail, actions);
+    dialog.addEventListener('cancel', event => { event.preventDefault(); dialog.close(); });
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => {
+      dialog.remove(); app.inert = previousInert; state.confirming = false;
+      if (previousFocus?.isConnected) previousFocus.focus();
+      resolve(accepted);
+    }, { once: true });
+    document.body.append(dialog);
+    dialog.showModal();
+    cancel.focus();
+  });
   const get = (object, path) => path.split('.').reduce((value, key) => value[key], object);
   const set = (object, path, value) => {
     const keys = path.split('.'); const key = keys.pop();
@@ -123,7 +155,7 @@
       const actions = element('div', undefined, 'actions');
       const up = button('Move up', () => move(rows, index, -1)); up.disabled = index === 0;
       const down = button('Move down', () => move(rows, index, 1)); down.disabled = index === rows.length - 1;
-      const remove = button('Delete', () => { if (confirm(`Delete this ${descriptor.label.toLowerCase()} item?`)) { rows.splice(index, 1); markDirty(); renderContent(); } }, 'danger');
+      const remove = button('Delete', async () => { if (await confirmAction('Delete item?', `Delete this ${descriptor.label.toLowerCase()} item? This takes effect when you save.`, 'Delete')) { rows.splice(index, 1); markDirty(); renderContent(); workspace.focus(); } }, 'danger');
       actions.append(up, down, remove); row.append(label, input, actions); list.append(row);
     });
     const add = button(`+ Add ${descriptor.label.toLowerCase()} item`, () => { rows.push(''); markDirty(); renderContent(); }); add.disabled = rows.length >= 100;
@@ -186,7 +218,7 @@
       const actions = element('div', undefined, 'actions');
       const up = button('↑ Move up', () => move(array, index, -1)); up.disabled = index === 0;
       const down = button('↓ Move down', () => move(array, index, 1)); down.disabled = index === array.length - 1;
-      const remove = button('Delete', () => { if (confirm(`Delete “${record.title || record.organization || config.label}”? This takes effect when you save.`)) { array.splice(index, 1); markDirty(); renderContent(); } }, 'danger');
+      const remove = button('Delete', async () => { if (await confirmAction(`Delete ${config.label.toLowerCase()}?`, `Delete “${record.title || record.organization || config.label}”? This takes effect when you save.`, 'Delete')) { array.splice(index, 1); markDirty(); renderContent(); workspace.focus(); } }, 'danger');
       actions.append(up, down, remove); top.append(description, actions);
       const body = element('div', undefined, 'record-body field-grid'); config.fields.forEach(descriptor => body.append(renderField(record, descriptor)));
       card.append(top, body); workspace.append(card);
@@ -224,13 +256,13 @@
     message('A newer version was saved elsewhere. Your draft is still here and has not been overwritten. Download it, load the latest saved version, or keep your draft after reviewing the conflict.', 'error');
     const actions = element('div', undefined, 'conflict-actions');
     actions.append(button('Download my draft', downloadDraft));
-    actions.append(button('Load latest saved version', () => {
-      if (!confirm('Replace the local draft with the latest saved content? Download your draft first if you want to keep a copy.')) return;
+    actions.append(button('Load latest saved version', async () => {
+      if (!await confirmAction('Replace your local draft?', 'Replace the local draft with the latest saved content? Download your draft first if you want to keep a copy.', 'Load latest version')) return;
       const latest = state.conflict; state.content = latest.content; state.revision = latest.revision; state.updatedAt = latest.updatedAt; state.conflict = null; state.dirty = false;
       saveState.textContent = 'All changes saved'; saveState.dataset.dirty = 'false'; saveButton.disabled = true; renderContent(); message('Loaded the latest saved version.', 'success');
     }));
-    actions.append(button('Keep my draft', () => {
-      if (!confirm('Keep your draft and use the latest revision for your next save? Saving will replace the newer content with your draft.')) return;
+    actions.append(button('Keep my draft', async () => {
+      if (!await confirmAction('Keep your draft?', 'Keep your draft and use the latest revision for your next save? Saving will replace the newer content with your draft.', 'Keep my draft')) return;
       state.revision = state.conflict.revision; state.updatedAt = state.conflict.updatedAt; state.conflict = null; markDirty(); message('Your draft is ready for review. Saving will replace the current saved content with this draft.', 'info');
     }));
     notice.append(actions);
@@ -276,7 +308,8 @@
     }
   };
   const signOut = async () => {
-    if (state.saving || (state.dirty && !confirm('Sign out and discard unsaved changes?'))) return;
+    if (state.saving) return;
+    if (state.dirty && !await confirmAction('Sign out?', 'Sign out and discard unsaved changes? Download or save your draft first if you want to keep it.', 'Sign out')) return;
     setEditorBusy(true);
     try { await request('/api/auth/sign-out', { method: 'POST', body: '{}' }); state.dirty = false; state.content = null; showLogin(); }
     catch (error) { message(`Could not sign out. ${error.message} Your draft is preserved.`, 'error'); }
@@ -292,7 +325,11 @@
     sidebarFooter.append(publicLink, element('p', state.user.email, 'small'), button('Sign out', signOut)); sidebar.append(identity, navigation, sidebarFooter);
     const main = element('main', undefined, 'workspace'); const toolbar = element('div', undefined, 'toolbar'); const title = element('div'); title.append(element('p', 'JAZFER LICAROS / CONTENT', 'eyebrow'), element('span', 'Google account · private editor', 'toolbar-title'));
     const actions = element('div', undefined, 'toolbar-actions'); saveState = element('span', 'All changes saved', 'small save-state'); saveState.dataset.dirty = 'false';
-    const discard = button('Discard changes', () => { if (!state.dirty || state.saving || !confirm('Discard all unsaved changes and load the saved version?')) return; loadContent(); });
+    const discard = button('Discard changes', async () => {
+      if (!state.dirty || state.saving) return;
+      if (!await confirmAction('Discard unsaved changes?', 'Discard all unsaved changes and load the saved version?', 'Discard changes')) return;
+      loadContent();
+    });
     saveButton = button('Save changes', save, 'primary'); saveButton.disabled = true; actions.append(saveState, discard, saveButton); toolbar.append(title, actions);
     notice = element('div', undefined, 'notice'); notice.setAttribute('aria-live', 'polite');
     workspace = element('div'); workspace.id = 'workspace'; workspace.tabIndex = -1;

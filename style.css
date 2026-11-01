@@ -1,3 +1,5 @@
+/* Keep the semantic hidden attribute effective when component styles set display. */
+[hidden] { display: none !important; }
 :root {
   color-scheme: dark;
   --bg: #141316;

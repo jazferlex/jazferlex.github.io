@@ -12,7 +12,7 @@ try {process.loadEnvFile(fileURLToPath(new URL('../.env.test.local',import.meta.
 const databaseUrl=process.env.TEST_DATABASE_URL;
 const parsed=new URL(databaseUrl);
 if(!['localhost','127.0.0.1'].includes(parsed.hostname) || !parsed.pathname.includes('test')) throw new Error('QA fixture requires an explicitly isolated localhost test database');
-const env={DATABASE_URL:databaseUrl,BETTER_AUTH_URL:'http://localhost:3000',BETTER_AUTH_SECRET:randomBytes(48).toString('base64url'),GOOGLE_CLIENT_ID:'local-qa-fixture-not-a-real-oauth-client',GOOGLE_CLIENT_SECRET:randomBytes(32).toString('base64url'),PUBLIC_SITE_URL:'https://jazferlex.github.io'};
+const env={DATABASE_URL:databaseUrl,BETTER_AUTH_URL:'http://127.0.0.1:3000',BETTER_AUTH_SECRET:randomBytes(48).toString('base64url'),GOOGLE_CLIENT_ID:'local-qa-fixture-not-a-real-oauth-client',GOOGLE_CLIENT_SECRET:randomBytes(32).toString('base64url'),PUBLIC_SITE_URL:'https://jazferlex.github.io'};
 const config=configFromEnv(env),pool=new pg.Pool({connectionString:databaseUrl});
 try {
  await migrate(pool,config);
@@ -26,7 +26,7 @@ try {
  else user=await context.internalAdapter.createUser({name:'Jazfer QA',email:'jazferlex@gmail.com',emailVerified:true});
  const session=await context.internalAdapter.createSession(user.id);
  const token=session.token+'.'+await makeSignature(session.token,config.authSecret);
- const cookie={name:'better-auth.session_token',value:encodeURIComponent(token),domain:'localhost',path:'/',httpOnly:true,secure:false,sameSite:'Lax',expires:Math.floor(session.expiresAt.getTime()/1000)};
+ const cookie={name:'better-auth.session_token',value:encodeURIComponent(token),domain:'127.0.0.1',path:'/',httpOnly:true,secure:false,sameSite:'Lax',expires:Math.floor(session.expiresAt.getTime()/1000)};
  await writeFile(new URL('../.env.qa.local',import.meta.url),Object.entries(env).map(([key,value])=>`${key}=${value}`).join('\n')+'\n',{mode:0o600});
  await writeFile(new URL('../.qa-session.json',import.meta.url),JSON.stringify([cookie],null,2)+'\n',{mode:0o600});
  console.log('Local QA fixture written to ignored backend/.env.qa.local and backend/.qa-session.json. No OAuth flow is simulated.');

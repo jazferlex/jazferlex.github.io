@@ -1,0 +1,11 @@
+import {createServer} from 'node:http';
+import {fileURLToPath} from 'node:url';
+import {toNodeHandler} from 'better-auth/node';
+import {loadLocalEnv} from '../src/env.js';
+import {runtimeHandler} from '../src/runtime.js';
+import {createStaticHandler} from '../src/static.js';
+loadLocalEnv();
+const api=toNodeHandler(runtimeHandler);
+const serve=createStaticHandler(fileURLToPath(new URL('../../',import.meta.url)),fileURLToPath(new URL('../public/',import.meta.url)));
+const server=createServer((req,res)=>req.url.startsWith('/api/')?api(req,res):serve(req,res));
+server.listen(Number(process.env.PORT || 3000),'127.0.0.1',()=>console.log(`Portfolio development server: http://localhost:${server.address().port}`));

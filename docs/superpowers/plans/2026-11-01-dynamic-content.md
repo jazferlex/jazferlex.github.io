@@ -1,0 +1,11 @@
+# Dynamic Portfolio Implementation Plan
+
+**Spec:** ../specs/2026-11-01-dynamic-content.md
+**Goal:** Persistent content with Google-only admin CRUD, preserving the portfolio design.
+**Stack:** Node.js, Better Auth, pg/PostgreSQL, Zod, HTML/CSS/JavaScript, Vercel and Neon Free.
+
+1. Backend worker owns `backend/**`: package and lockfile, shared schema, seed JSON from existing HTML, Postgres repository, migration/seed scripts, Better Auth setup, API, local server, Vercel config, static admin serving/build tooling, API tests and setup README. Publish `backend/public/content-schema.json` or shared form metadata if useful, but frontend consumes the documented JSON contract. `npm test`, `npm run build`, `npm run db:migrate`, `npm run db:seed`, `npm run dev` must be real scripts. Dev defaults to3000. Config comes from root `.env.local` and environment; no secrets committed.
+2. UI worker owns root `content.js`, `content-config.js`, `index.html`, and `backend/public/admin/**`: public DOM updates with safe text, Google-only login and full CRUD editor. Consumes API contract in spec. No package/lockfile/API edits. Source fallback remains, current images and styles preserved. Default config backend origin `https://jazfer-portfolio-admin.vercel.app`; override by page configuration for local QA. Admin reads API at same origin. Hand-authored accessible forms, no React or build framework.
+3. Controller provisions/link resources, supplies secrets through secure paths, runs real database setup and checks, integrates both bounded file sets, performs browser QA and independent review, fixes findings, and creates PR. Owner supplies Google OAuth credentials; absence must block authenticated production access rather than create a bypass. Google credentials and live activation may need owner action.
+
+Tasks 1 and2 share only this frozen JSON/API contract and have disjoint file ownership. Do not change contract without coordinating. Use tests before behavior changes; do not add tests mirroring cosmetic implementation. All spec constraints bind both workers. Seed file must match the contract exactly. Frontend does not import server code or expose secrets. Integration checks cover all scalar and repeatable fields and deleted/draft records.

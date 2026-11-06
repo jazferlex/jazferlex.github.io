@@ -1,4 +1,4 @@
-const capturedPath = /^(?:content|admin\/content|auth\/(?:sign-in\/social|callback\/google|get-session|sign-out|error))$/;
+const capturedPath = /^(?:(?:admin\/)?(?:content|visits)|auth\/(?:sign-in\/social|callback\/google|get-session|sign-out|error))$/;
 export function rewriteApiUrl(rawUrl) {
   const url=new URL(rawUrl,'http://internal.invalid');
   const captures=url.searchParams.getAll('__portfolio_route');

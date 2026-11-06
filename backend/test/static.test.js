@@ -9,6 +9,7 @@ test('local static server serves public files and rejects private backend, env, 
  const base=`http://127.0.0.1:${server.address().port}`;
  try {
   assert.equal((await fetch(base+'/')).status,200);
+  assert.equal((await fetch(base+'/visits.js')).status,200);
   assert.equal((await fetch(base+'/images/profile.png')).status,200);
   for(const path of ['/.env.local','/.env.runtime.local','/.git/config','/backend/seed/content.json','/backend/.env.test.local','/docs/superpowers/specs/2026-11-01-dynamic-content.md','/admin/%2e%2e%2f%2e%2e%2f.env.local','/images/%2e%2e%2f.env.local']) assert.equal((await fetch(base+path)).status,404,path);
  } finally {await new Promise(resolve=>server.close(resolve));}

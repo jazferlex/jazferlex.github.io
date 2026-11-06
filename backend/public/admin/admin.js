@@ -142,6 +142,14 @@
     return parsed.href;
   };
   const move = (array, index, direction) => { [array[index], array[index + direction]] = [array[index + direction], array[index]]; markDirty(); renderContent(); };
+  const projectMoveOffset = (projects, index, direction) => {
+    const { category, status } = projects[index];
+    for (let next = index + direction; next >= 0 && next < projects.length; next += direction) {
+      const project = projects[next];
+      if (project.category === category && (status === 'draft' || project.status === 'published')) return next - index;
+    }
+    return 0;
+  };
   const stringList = (object, descriptor) => {
     const container = element('div', undefined, 'field wide');
     const title = element('h3', descriptor.label); title.id = `field-${++fieldSequence}`; container.append(title);
@@ -195,7 +203,7 @@
     if (preview) { preview.target = '_blank'; preview.rel = 'noopener noreferrer'; wrapper.append(preview); }
     validate();
     input.addEventListener('input', () => { set(object, descriptor.path, descriptor.type === 'number' ? Number(input.value) : input.value); validate(); markDirty(); });
-    if (descriptor.path === 'status') input.addEventListener('change', renderContent);
+    if (descriptor.path === 'status' || descriptor.path === 'category') input.addEventListener('change', renderContent);
     return wrapper;
   };
   const panel = (title, description, descriptors) => {
@@ -216,8 +224,14 @@
       title.append(element('span', record.status === 'draft' ? 'DRAFT' : 'PUBLISHED', `badge ${record.status === 'draft' ? 'draft' : ''}`));
       description.append(title, element('p', `#${record.id}`, 'small'));
       const actions = element('div', undefined, 'actions');
-      const up = button('↑ Move up', () => move(array, index, -1)); up.disabled = index === 0;
-      const down = button('↓ Move down', () => move(array, index, 1)); down.disabled = index === array.length - 1;
+      const moveOffset = direction => {
+        if (key === 'projects') return projectMoveOffset(array, index, direction);
+        return array[index + direction] ? direction : 0;
+      };
+      const upOffset = moveOffset(-1);
+      const downOffset = moveOffset(1);
+      const up = button('↑ Move up', () => move(array, index, upOffset)); up.disabled = upOffset === 0;
+      const down = button('↓ Move down', () => move(array, index, downOffset)); down.disabled = downOffset === 0;
       const remove = button('Delete', async () => { if (await confirmAction(`Delete ${config.label.toLowerCase()}?`, `Delete “${record.title || record.organization || config.label}”? This takes effect when you save.`, 'Delete')) { array.splice(index, 1); markDirty(); renderContent(); workspace.focus(); } }, 'danger');
       actions.append(up, down, remove); top.append(description, actions);
       const body = element('div', undefined, 'record-body field-grid'); config.fields.forEach(descriptor => body.append(renderField(record, descriptor)));
@@ -333,6 +347,7 @@
     workspace.replaceChildren(); fieldSequence = 0;
     const description = {
       Overview: 'A little space to keep your work up to date.',
+      Projects: 'Move projects within their public section. Published projects skip drafts when you reorder them. Save, then reload the public page to see the new order.',
       Visits: 'Page views for the last 30 days in Manila time. Location is estimated from network data. A refresh counts as a new page view.'
     };
     const intro = element('div', undefined, 'intro'); intro.append(element('h1', state.tab), element('p', description[state.tab] || 'Make it yours. Changes go live when you save.')); workspace.append(intro);

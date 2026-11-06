@@ -4,6 +4,8 @@ import {rewriteApiUrl} from '../src/routing.js';
 test('Vercel single function reconstructs captured API path and preserves OAuth query values',()=>{
  assert.equal(rewriteApiUrl('/api/index?__portfolio_route=content'),'/api/content');
  assert.equal(rewriteApiUrl('/api/index?__portfolio_route=admin%2Fcontent'),'/api/admin/content');
+ assert.equal(rewriteApiUrl('/api/index?__portfolio_route=visits'),'/api/visits');
+ assert.equal(rewriteApiUrl('/api/index?__portfolio_route=admin%2Fvisits'),'/api/admin/visits');
  assert.equal(rewriteApiUrl('/api/index?__portfolio_route=auth%2Fcallback%2Fgoogle&code=abc%2B123&state=x%2Fy'),'/api/auth/callback/google?code=abc%2B123&state=x%2Fy');
  assert.equal(rewriteApiUrl('/api/content'),'/api/content');
 });

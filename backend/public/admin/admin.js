@@ -2,7 +2,7 @@
   'use strict';
   const app = document.getElementById('app');
   const PUBLIC_SITE = 'https://jazferlex.github.io/';
-  const tabs = ['Overview', 'Site & SEO', 'Hero', 'Projects', 'About', 'Experience', 'Toolkit', 'Contact & Footer'];
+  const tabs = ['Overview', 'Visits', 'Site & SEO', 'Hero', 'Projects', 'About', 'Experience', 'Toolkit', 'Contact & Footer'];
   const state = { content: null, revision: null, updatedAt: null, user: null, tab: 'Overview', dirty: false, saving: false, confirming: false, conflict: null };
   let fieldSequence = 0;
   let notice;
@@ -236,10 +236,108 @@
     card.append(list); workspace.append(card);
     workspace.append(panel('Publishing notes', 'Images and resume files use URLs. The site stays available if the content API is unavailable. Google sign-in is restricted to your authorized account.', []));
   };
+  const visitCounts = new Intl.NumberFormat();
+  const visitDates = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' });
+  const countryNames = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['en'], { type: 'region' }) : null;
+  const countryName = code => /^[A-Z]{2}$/.test(code) ? countryNames?.of(code) || code : code;
+  const regionName = code => {
+    const country = code.split('-')[0];
+    return country === code ? code : `${countryName(country)} · ${code}`;
+  };
+  const visitBreakdown = (title, entries, formatLabel = label => label) => {
+    const card = element('section', undefined, 'panel');
+    card.append(element('h2', title));
+    if (!entries.length) {
+      card.append(element('p', 'No data yet.'));
+      return card;
+    }
+    const list = element('dl', undefined, 'visit-list');
+    entries.forEach(({ label, count }) => {
+      const row = element('div');
+      row.append(element('dt', formatLabel(label)), element('dd', visitCounts.format(count)));
+      list.append(row);
+    });
+    card.append(list);
+    return card;
+  };
+  const dailyVisits = days => {
+    const card = element('section', undefined, 'panel');
+    const heading = element('h2', 'Daily page views');
+    heading.id = 'daily-views-heading';
+    const table = element('table', undefined, 'visit-table');
+    table.setAttribute('aria-labelledby', heading.id);
+    const header = table.createTHead().insertRow();
+    for (const label of ['Date (Manila)', 'Page views']) {
+      const cell = element('th', label);
+      cell.scope = 'col';
+      header.append(cell);
+    }
+    const body = table.createTBody();
+    [...days].sort((first, second) => second.date.localeCompare(first.date)).forEach(({ date, count }) => {
+      const row = body.insertRow();
+      const dateCell = element('th', visitDates.format(new Date(date)));
+      dateCell.scope = 'row';
+      row.append(dateCell, element('td', visitCounts.format(count)));
+    });
+    card.append(heading, table);
+    return card;
+  };
+  const visits = () => {
+    const report = element('div');
+    const toolbar = element('div', undefined, 'visit-toolbar');
+    const status = element('p');
+    status.setAttribute('role', 'status');
+    const results = element('div');
+    let loading = false;
+    const load = async () => {
+      if (loading) return;
+      loading = true;
+      refresh.setAttribute('aria-disabled', 'true');
+      results.setAttribute('aria-busy', 'true');
+      status.textContent = 'Loading visit data…';
+      try {
+        const data = await request('/api/admin/visits');
+        if (!report.isConnected) return;
+        const summary = element('div', undefined, 'stat visit-total');
+        summary.append(element('strong', visitCounts.format(data.total)), element('span', 'page views in the last 30 days'));
+        results.replaceChildren(summary);
+        if (data.total === 0) {
+          results.append(element('p', 'No page views recorded yet.', 'empty'));
+        } else {
+          const grid = element('div', undefined, 'visit-grid');
+          grid.append(visitBreakdown('Countries', data.countries, countryName),
+            visitBreakdown('Regions', data.regions, regionName),
+            visitBreakdown('Browsers', data.browsers),
+            visitBreakdown('Operating systems', data.operatingSystems));
+          results.append(grid, dailyVisits(data.days));
+        }
+        status.textContent = 'Visit data is up to date.';
+      } catch (error) {
+        if (!report.isConnected) return;
+        status.textContent = error.status === 401
+          ? 'Your session expired. Sign in in another tab, then refresh this report.'
+          : 'Could not load visit data. Try refreshing.';
+      } finally {
+        loading = false;
+        refresh.removeAttribute('aria-disabled');
+        results.removeAttribute('aria-busy');
+      }
+    };
+    const refresh = button('Refresh report', load);
+    toolbar.append(status, refresh);
+    report.append(toolbar, results);
+    workspace.append(report);
+    load();
+  };
   function renderContent() {
     workspace.replaceChildren(); fieldSequence = 0;
-    const intro = element('div', undefined, 'intro'); intro.append(element('h1', state.tab), element('p', state.tab === 'Overview' ? 'A little space to keep your work up to date.' : 'Make it yours. Changes go live when you save.')); workspace.append(intro);
+    const description = {
+      Overview: 'A little space to keep your work up to date.',
+      Visits: 'Page views for the last 30 days in Manila time. Location is estimated from network data. A refresh counts as a new page view.'
+    };
+    const intro = element('div', undefined, 'intro'); intro.append(element('h1', state.tab), element('p', description[state.tab] || 'Make it yours. Changes go live when you save.')); workspace.append(intro);
     if (state.tab === 'Overview') overview();
+    else if (state.tab === 'Visits') visits();
     else {
       (sections[state.tab] || []).forEach(([title, description, fields]) => workspace.append(panel(title, description, fields)));
       if (state.tab === 'Projects') records('projects');

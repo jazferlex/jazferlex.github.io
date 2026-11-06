@@ -1,7 +1,7 @@
 import {readFile,realpath} from 'node:fs/promises';
 import {resolve,sep,extname} from 'node:path';
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.pdf':'application/pdf','.txt':'text/plain; charset=utf-8'};
-const rootFiles=new Set(['index.html','content.js','content-config.js','motion.js','style.css','Jazfer_Licaros.pdf','ads.txt']);
+const rootFiles=new Set(['index.html','content.js','content-config.js','visits.js','motion.js','style.css','Jazfer_Licaros.pdf','ads.txt']);
 export function createStaticHandler(root,publicRoot) {
   return async (request,response) => {
     if(!['GET','HEAD'].includes(request.method)) {response.writeHead(405,{'allow':'GET, HEAD'}).end();return;}

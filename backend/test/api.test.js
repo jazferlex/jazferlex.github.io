@@ -7,13 +7,15 @@ import {configFromEnv} from '../src/config.js';
 import {createAuth, authOptions, isOwner} from '../src/auth.js';
 import {migrate} from '../src/migrate.js';
 import {ContentRepository} from '../src/repository.js';
+import {VisitRepository} from '../src/visits.js';
 import {createApp} from '../src/app.js';
 try { process.loadEnvFile(new URL('../.env.test.local',import.meta.url)); } catch {}
 assert.ok(process.env.TEST_DATABASE_URL, 'TEST_DATABASE_URL required: use an isolated real Postgres database');
 const pool = new pg.Pool({connectionString:process.env.TEST_DATABASE_URL});
 const seed = JSON.parse(await readFile(new URL('../seed/content.json', import.meta.url)));
 const config = configFromEnv({DATABASE_URL:process.env.TEST_DATABASE_URL, BETTER_AUTH_SECRET:'test-only-secret-for-isolated-database-12345678',BETTER_AUTH_URL:'http://localhost:3000',GOOGLE_CLIENT_ID:'test-google-client-id',GOOGLE_CLIENT_SECRET:'test-google-client-secret',PUBLIC_SITE_URL:'https://jazferlex.github.io'});
-const auth=createAuth(config,pool), repo=new ContentRepository(pool), app=createApp({config,auth,repository:repo});
+const auth=createAuth(config,pool), repo=new ContentRepository(pool), visits=new VisitRepository(pool);
+const app=createApp({config,auth,repository:repo,visits});
 const request=(path,options={}) => app(new Request('http://localhost:3000'+path,options));
 const put=(content,revision,cookie,extra={}) => request('/api/admin/content',{method:'PUT',headers:{origin:config.authOrigin,'content-type':'application/json',cookie,...extra},body:JSON.stringify({content,revision})});
 async function session(email,verified=true) {
@@ -23,7 +25,7 @@ async function session(email,verified=true) {
   const signature=createHmac('sha256',config.authSecret).update(token).digest('base64');
   return `better-auth.session_token=${encodeURIComponent(token+'.'+signature)}`;
 }
-before(async()=>{await migrate(pool,config); await pool.query('TRUNCATE "session", "account", "user", portfolio_content CASCADE'); await repo.seed(seed);});
+before(async()=>{await migrate(pool,config); await pool.query('TRUNCATE "session", "account", "user", portfolio_content, portfolio_visit_counts CASCADE'); await repo.seed(seed);});
 after(async()=>{await pool.end();});
 test('configuration fails closed without Google but public content remains available',async()=>{
  const missing=configFromEnv({DATABASE_URL:process.env.TEST_DATABASE_URL}); assert.equal(missing.authReady,false);
@@ -73,4 +75,70 @@ test('authorized writes persist atomically, filter drafts, reject stale revision
  assert.equal((await request('/api/admin/content',{headers:{cookie}})).headers.get('cache-control'),'no-store');
  await pool.query('UPDATE "user" SET "emailVerified"=false WHERE email=$1',['jazferlex@gmail.com']);
  assert.equal((await put(seed,3,cookie)).status,403);
+});
+
+test('visit routes restrict recording to the public origin and reports to the verified owner',async()=>{
+ assert.equal((await request('/api/visits')).status,405);
+ for (const origin of [undefined, 'null', config.authOrigin, 'https://evil.example']) {
+  const headers = origin === undefined ? {} : {origin};
+  assert.equal((await request('/api/visits',{method:'POST',headers})).status,403);
+ }
+ assert.equal((await request('/api/visits',{method:'POST',headers:{origin:config.publicOrigin},body:'unexpected payload'})).status,400);
+ assert.equal((await request('/api/admin/visits',{method:'POST'})).status,405);
+ assert.equal((await request('/api/admin/visits')).status,401);
+ const wrong=await session('visits-other@example.com');
+ assert.equal((await request('/api/admin/visits',{headers:{cookie:wrong}})).status,403);
+ await pool.query('DELETE FROM "user" WHERE email=$1',['jazferlex@gmail.com']);
+ const unverified=await session('jazferlex@gmail.com',false);
+ assert.equal((await request('/api/admin/visits',{headers:{cookie:unverified}})).status,403);
+ await pool.query('DELETE FROM "user" WHERE email=$1',['jazferlex@gmail.com']);
+});
+
+test('concurrent views increment daily counts and keep independent location, browser, and OS breakdowns',async()=>{
+ const headers = {
+  origin: config.publicOrigin,
+  'x-vercel-ip-country': 'PH',
+  'x-vercel-ip-country-region': 'CEB',
+  'x-vercel-ip-city': 'Cebu%20City',
+  'x-forwarded-for': '192.0.2.10',
+  'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0'
+ };
+ const record = visitHeaders => request('/api/visits',{method:'POST',headers:visitHeaders});
+ const results = await Promise.all(Array.from({length:12},()=>record(headers)));
+ assert.ok(results.every(result=>result.status===204 && !result.headers.has('set-cookie')));
+ assert.equal((await record({
+  origin:config.publicOrigin,
+  'x-vercel-ip-country':'US',
+  'x-vercel-ip-country-region':'CA',
+  'user-agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 18_4 like Mac OS X) AppleWebKit/605.1.15 FxiOS/135.0 Mobile/15E148 Safari/605.1.15'
+ })).status,204);
+ assert.equal((await record({
+  origin:config.publicOrigin,
+  'x-vercel-ip-country':'not-a-country',
+  'x-vercel-ip-country-region':'some arbitrary value',
+  'user-agent':'Unknown custom agent'
+ })).status,204);
+
+ await pool.query(`INSERT INTO portfolio_visit_counts (day, dimension, label, views)
+   VALUES ((now() AT TIME ZONE 'Asia/Manila')::date-29,'days','',2),
+     ((now() AT TIME ZONE 'Asia/Manila')::date-30,'days','',500)`);
+ const cookie=await session('jazferlex@gmail.com');
+ const response=await request('/api/admin/visits',{headers:{cookie}});
+ assert.equal(response.status,200);
+ assert.equal(response.headers.get('cache-control'),'no-store');
+ assert.equal(response.headers.get('access-control-allow-origin'),null);
+ const report=await response.json();
+ assert.equal(report.total,16);
+ assert.equal(report.days.length,30);
+ assert.deepEqual(report.days.map(day=>day.count),[2,...Array(28).fill(0),14]);
+ const {rows:[{today}]}=await pool.query("SELECT to_char((now() AT TIME ZONE 'Asia/Manila')::date,'YYYY-MM-DD') AS today");
+ assert.equal(report.days.at(-1).date,today);
+ assert.deepEqual(report.countries,[{label:'PH',count:12},{label:'US',count:1},{label:'Unknown',count:1}]);
+ assert.deepEqual(report.regions,[{label:'PH-CEB',count:12},{label:'US-CA',count:1},{label:'Unknown',count:1}]);
+ assert.deepEqual(report.browsers,[{label:'Edge',count:12},{label:'Firefox',count:1},{label:'Unknown',count:1}]);
+ assert.deepEqual(report.operatingSystems,[{label:'Windows',count:12},{label:'Unknown',count:1},{label:'iOS',count:1}]);
+ const {rows} = await pool.query('SELECT * FROM portfolio_visit_counts');
+ for (const row of rows) assert.deepEqual(Object.keys(row),['day','dimension','label','views']);
+ const stored=JSON.stringify(rows);
+ for(const value of ['192.0.2.10','Cebu','Mozilla','not-a-country','some arbitrary value','Unknown custom agent']) assert.ok(!stored.includes(value));
 });
